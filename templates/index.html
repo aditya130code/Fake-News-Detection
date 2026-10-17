@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101a2b">
+  <meta name="description" content="A machine-learning demonstration that classifies news text using a locally trained TF-IDF model.">
+  <title>Fake News Detection System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="Fake News Detection System home">
+        <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>Signal<span class="brand-light">Check</span></span>
+      </a>
+      <div class="topbar-note"><span class="status-dot"></span> ML-powered research demo</div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-copy">
+          <p class="eyebrow"><span class="eyebrow-line"></span> NEWS LITERACY, MEET MACHINE LEARNING</p>
+          <h1 id="hero-title">Look beyond<br>the <span>headline.</span></h1>
+          <p class="hero-description">Explore how language patterns can help classify news. Paste a headline or article to see what our model learned from its training data.</p>
+          <div class="hero-footnote"><span class="sparkle" aria-hidden="true">✳</span> A learning tool — not a substitute for fact-checking.</div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <div class="orb orb-one"></div>
+          <div class="orb orb-two"></div>
+          <div class="signal-card">
+            <div class="signal-card-top"><span class="signal-icon">✳</span><span>TEXT SIGNALS</span><span class="signal-live">LIVE</span></div>
+            <div class="signal-lines"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+            <div class="signal-card-bottom"><span>WORDS → FEATURES</span><span>01 / 03</span></div>
+          </div>
+          <div class="floating-tag"><span class="tag-dot"></span> Pattern analysis</div>
+        </div>
+      </section>
+
+      <section class="workspace-grid" aria-label="News analysis workspace">
+        <section class="input-card card" aria-labelledby="analyzer-title">
+          <div class="section-heading">
+            <div>
+              <p class="eyebrow small">TRY THE CLASSIFIER</p>
+              <h2 id="analyzer-title">Analyze a story</h2>
+            </div>
+            <span class="step-badge">01 <span>/ 02</span></span>
+          </div>
+          <p class="card-intro">Add the headline, article, or both. More context gives the model more language to analyze.</p>
+          <label class="input-label" for="news-input">NEWS TEXT <span>REQUIRED</span></label>
+          <textarea id="news-input" maxlength="100000" placeholder="Paste a headline or article here..." spellcheck="true"></textarea>
+          <div class="input-meta"><span id="input-hint">Your text stays on this local application.</span><span id="character-count">0 / 100,000</span></div>
+          <div class="form-actions">
+            <button class="button button-primary" id="check-button" type="button">
+              <span class="button-label">Check this story</span>
+              <span class="button-arrow" aria-hidden="true">↗</span>
+              <span class="spinner" aria-hidden="true"></span>
+            </button>
+            <button class="button button-quiet" id="clear-button" type="button">Clear text</button>
+          </div>
+          <p class="form-error" id="form-error" role="alert" hidden></p>
+          <section class="result-panel" id="result-panel" aria-live="polite" aria-atomic="true" hidden>
+            <div class="result-icon" id="result-icon" aria-hidden="true"></div>
+            <div class="result-copy">
+              <p class="result-kicker">MODEL CLASSIFICATION</p>
+              <h3 id="result-title"></h3>
+              <p id="result-message"></p>
+            </div>
+            <button class="result-dismiss" id="dismiss-result" type="button" aria-label="Dismiss result">×</button>
+          </section>
+          <p class="disclaimer"><span aria-hidden="true">ⓘ</span> Predictions reflect patterns in the training dataset. They are not evidence that a real-world claim is true or false.</p>
+        </section>
+
+        <aside class="side-column">
+          <section class="how-card card" aria-labelledby="how-title">
+            <div class="section-heading compact">
+              <div>
+                <p class="eyebrow small">THE PROCESS</p>
+                <h2 id="how-title">How it works</h2>
+              </div>
+              <span class="step-badge">02 <span>/ 02</span></span>
+            </div>
+            <ol class="process-list">
+              <li><span class="process-number">01</span><span><strong>Text in</strong><small>Your story is read as text.</small></span></li>
+              <li><span class="process-number">02</span><span><strong>Patterns mapped</strong><small>TF-IDF represents useful words.</small></span></li>
+              <li><span class="process-number">03</span><span><strong>Class predicted</strong><small>Logistic Regression picks a class.</small></span></li>
+            </ol>
+            <div class="privacy-note"><span aria-hidden="true">⌂</span><span><strong>Runs locally</strong><small>Text is processed by your local app.</small></span></div>
+          </section>
+
+          <section class="model-card card" aria-labelledby="model-title">
+            <div class="model-card-heading">
+              <div><p class="eyebrow small">UNDER THE HOOD</p><h2 id="model-title">Model snapshot</h2></div>
+              <span class="model-status" id="model-status"><i></i> Loading</span>
+            </div>
+            <div class="model-name"><span class="model-glyph" aria-hidden="true">ƒ</span><span><strong id="model-algorithm">Logistic Regression</strong><small id="model-features">TF-IDF · unigrams + bigrams</small></span></div>
+            <div class="metrics-grid" id="metrics-grid">
+              <div class="metric"><span>Accuracy</span><strong id="metric-accuracy">—</strong></div>
+              <div class="metric"><span>Precision</span><strong id="metric-precision">—</strong></div>
+              <div class="metric"><span>Recall</span><strong id="metric-recall">—</strong></div>
+              <div class="metric"><span>F1 score</span><strong id="metric-f1">—</strong></div>
+            </div>
+            <p class="model-footnote" id="dataset-summary">Evaluation details load after model training.</p>
+          </section>
+        </aside>
+      </section>
+
+      <section class="bottom-note" aria-label="Project note">
+        <span class="bottom-note-icon" aria-hidden="true">✳</span>
+        <p><strong>Curiosity is the first check.</strong> Compare sources, look for original reporting, and verify claims with trusted fact-checkers.</p>
+        <a href="https://www.ifla.org/publications/how-to-spot-fake-news/" target="_blank" rel="noopener noreferrer">Media literacy guide <span aria-hidden="true">↗</span></a>
+      </section>
+    </main>
+
+    <footer class="footer"><span>SignalCheck <span class="footer-divider">·</span> Fake News Detection System</span><span>Built for learning, not truth adjudication.</span></footer>
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}" defer></script>
+</body>
+</html>
